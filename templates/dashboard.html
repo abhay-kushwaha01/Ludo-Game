@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Ludo Master{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold" style="color: white; margin-bottom: 1rem;">
+                <i class="fas fa-tachometer-alt" style="color: var(--primary-color);"></i> Welcome back, {{ current_user.username }}!
+            </h1>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-2">Games Played</p>
+                            <h3 class="fw-bold" style="color: var(--primary-color);">{{ current_user.games_played }}</h3>
+                        </div>
+                        <i class="fas fa-gamepad" style="font-size: 2.5rem; color: var(--primary-color); opacity: 0.2;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-2">Wins</p>
+                            <h3 class="fw-bold" style="color: var(--success-color);">{{ current_user.wins }}</h3>
+                        </div>
+                        <i class="fas fa-trophy" style="font-size: 2.5rem; color: var(--success-color); opacity: 0.2;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-2">Win Rate</p>
+                            <h3 class="fw-bold" style="color: var(--info-color);">
+                                {% if current_user.games_played > 0 %}
+                                    {{ "%.1f"|format((current_user.wins / current_user.games_played) * 100) }}%
+                                {% else %}
+                                    0%
+                                {% endif %}
+                            </h3>
+                        </div>
+                        <i class="fas fa-chart-pie" style="font-size: 2.5rem; color: var(--info-color); opacity: 0.2;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-3">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-2">Captures</p>
+                            <h3 class="fw-bold" style="color: var(--warning-color);">{{ current_user.total_captures }}</h3>
+                        </div>
+                        <i class="fas fa-swords" style="font-size: 2.5rem; color: var(--warning-color); opacity: 0.2;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; color: white;">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-3">Ready to Play?</h5>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="{{ url_for('game.lobby') }}" class="btn btn-light" style="font-weight: 600;">
+                            <i class="fas fa-play-circle"></i> Play Now
+                        </a>
+                        <a href="{{ url_for('game.leaderboard') }}" class="btn btn-outline-light" style="font-weight: 600;">
+                            <i class="fas fa-crown"></i> View Leaderboard
+                        </a>
+                        <a href="{{ url_for('game.statistics') }}" class="btn btn-outline-light" style="font-weight: 600;">
+                            <i class="fas fa-chart-bar"></i> View Statistics
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Games -->
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-history"></i> Recent Games</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Opponent</th>
+                                    <th>Result</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2024-01-15</td>
+                                    <td>Player 2, Player 3, AI Bot</td>
+                                    <td><span class="badge bg-success">Won</span></td>
+                                    <td>12 mins</td>
+                                </tr>
+                                <tr>
+                                    <td>2024-01-14</td>
+                                    <td>Player 5, Player 8, Player 3</td>
+                                    <td><span class="badge bg-danger">Lost</span></td>
+                                    <td>15 mins</td>
+                                </tr>
+                                <tr>
+                                    <td>2024-01-13</td>
+                                    <td>AI Bot (Hard)</td>
+                                    <td><span class="badge bg-success">Won</span></td>
+                                    <td>8 mins</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-star"></i> Achievements</h5>
+                </div>
+                <div class="card-body">
+                    <div class="achievement-grid">
+                        <div class="achievement" title="First Victory">
+                            <i class="fas fa-trophy" style="color: #fbbf24;"></i>
+                            <small>First Victory</small>
+                        </div>
+                        <div class="achievement" title="5 Wins">
+                            <i class="fas fa-crown" style="color: #8b5cf6;"></i>
+                            <small>5 Wins</small>
+                        </div>
+                        <div class="achievement" title="10 Captures">
+                            <i class="fas fa-swords" style="color: #ef4444;"></i>
+                            <small>10 Captures</small>
+                        </div>
+                        <div class="achievement locked" title="Locked">
+                            <i class="fas fa-lock"></i>
+                            <small>Locked</small>
+                        </div>
+                        <div class="achievement locked" title="Locked">
+                            <i class="fas fa-lock"></i>
+                            <small>Locked</small>
+                        </div>
+                        <div class="achievement locked" title="Locked">
+                            <i class="fas fa-lock"></i>
+                            <small>Locked</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stat-card {
+        background: rgba(255, 255, 255, 0.95) !important;
+        border: none !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .achievement-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .achievement {
+        padding: 1rem;
+        background: linear-gradient(135deg, #f0f0f0, #f9f9f9);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .achievement:hover {
+        transform: scale(1.05);
+        background: linear-gradient(135deg, #e5e5e5, #f0f0f0);
+    }
+
+    .achievement i {
+        display: block;
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .achievement.locked {
+        background: linear-gradient(135deg, #d1d5db, #e5e7eb);
+        color: #999;
+    }
+
+    .achievement.locked i {
+        color: #999;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(99, 102, 241, 0.05);
+    }
+</style>
+{% endblock %}

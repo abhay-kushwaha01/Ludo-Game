@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block title %}Game {{ room.room_code }} | Ludo Master{% endblock %}
+
+{% block content %}
+<div class="container-fluid game-container" style="background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%); min-height: calc(100vh - 70px); padding: 20px;">
+    <div class="row h-100">
+        <!-- Game Board Section -->
+        <div class="col-lg-8 mb-3">
+            <div class="card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="card-header" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 text-white">
+                            <i class="fas fa-crown"></i> Room {{ room.room_code }}
+                        </h5>
+                        <span class="badge" id="gameStatus" style="background: var(--primary-color); font-size: 0.9rem;">
+                            <i class="fas fa-hourglass-half"></i> Waiting...
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body" style="padding: 15px;">
+                    <!-- Ludo Board (15x15 grid) -->
+                    <div id="ludoBoard" class="ludo-board"></div>
+                </div>
+            </div>
+
+            <!-- Game Controls -->
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="card text-center" style="background: rgba(99, 102, 241, 0.1); border: 2px solid var(--primary-color);">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-2">DICE ROLL</h6>
+                            <div id="diceDisplay" style="font-size: 3rem; font-weight: bold; color: var(--primary-color); margin: 10px 0;">-</div>
+                            <button id="rollDiceBtn" class="btn btn-primary w-100 py-3" style="font-weight: 700;">
+                                <i class="fas fa-cube"></i> ROLL DICE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card text-center" style="background: rgba(139, 92, 246, 0.1); border: 2px solid var(--secondary-color);">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-2" id="currentPlayerLabel">YOUR TURN</h6>
+                            <div id="currentPlayerName" style="font-size: 1.3rem; font-weight: bold; color: var(--secondary-color); margin: 10px 0;">Loading...</div>
+                            <button id="surrenderBtn" class="btn btn-danger w-100 py-2" style="font-weight: 700; font-size: 0.9rem;">
+                                <i class="fas fa-flag"></i> Surrender
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar: Players, Chat, History -->
+        <div class="col-lg-4">
+            <!-- Players Panel -->
+            <div class="card mb-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="card-header" style="background: linear-gradient(135deg, rgba(99,102,241,0.5), rgba(139,92,246,0.5));">
+                    <h6 class="mb-0 text-white">
+                        <i class="fas fa-users"></i> PLAYERS
+                    </h6>
+                </div>
+                <div class="card-body" id="playersContainer" style="max-height: 250px; overflow-y: auto; padding: 10px;">
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-spinner fa-spin"></i> Loading players...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Panel -->
+            <div class="card mb-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="card-header" style="background: linear-gradient(135deg, rgba(22,163,74,0.5), rgba(59,130,246,0.5));">
+                    <h6 class="mb-0 text-white">
+                        <i class="fas fa-comments"></i> CHAT
+                    </h6>
+                </div>
+                <div class="card-body" style="padding: 10px;">
+                    <div id="chatContainer" style="height: 250px; display: flex; flex-direction: column;">
+                        <div id="chatMessages" style="flex: 1; overflow-y: auto; margin-bottom: 10px; padding-right: 5px;">
+                            <div class="text-center text-muted py-3">
+                                <small>No messages yet</small>
+                            </div>
+                        </div>
+                        <form id="chatForm" class="d-flex gap-2">
+                            <input type="text" id="chatInput" class="form-control" placeholder="Type message..." style="font-size: 0.9rem;">
+                            <button type="submit" class="btn btn-sm btn-success py-2 px-3">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Info -->
+            <div class="card" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <div class="card-header" style="background: linear-gradient(135deg, rgba(249,115,22,0.5), rgba(239,68,68,0.5));">
+                    <h6 class="mb-0 text-white">
+                        <i class="fas fa-info-circle"></i> INFO
+                    </h6>
+                </div>
+                <div class="card-body" style="padding: 10px; font-size: 0.9rem;">
+                    <div class="mb-2">
+                        <strong>Room:</strong> {{ room.room_code }}
+                    </div>
+                    <div class="mb-2">
+                        <strong>Players:</strong> <span id="playerCount">1</span>/4
+                    </div>
+                    <div class="mb-2">
+                        <strong>Status:</strong> <span id="roomStatus" class="badge bg-warning">Waiting</span>
+                    </div>
+                    <button class="btn btn-sm btn-danger w-100 mt-2" id="leaveGameBtn">
+                        <i class="fas fa-arrow-left"></i> Leave Game
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Game Over Modal -->
+<div class="modal fade" id="gameOverModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2)); border: 2px solid var(--primary-color);">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">
+                    <i class="fas fa-crown" style="color: gold;"></i> Game Finished
+                </h5>
+            </div>
+            <div class="modal-body text-center">
+                <h3 id="winnerName" style="color: var(--primary-color); font-weight: bold;">Player Name</h3>
+                <p class="text-muted">Wins the game!</p>
+                <div id="finalStandings" style="margin: 20px 0;"></div>
+            </div>
+            <div class="modal-footer border-0">
+                <a href="/lobby" class="btn btn-primary w-100">
+                    <i class="fas fa-arrow-left"></i> Back to Lobby
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Initialize game configuration
+const gameConfig = {
+    roomCode: '{{ room.room_code }}',
+    userId: {{ current_user.id }},
+    username: '{{ current_user.username }}',
+};
+
+// Store in session storage for access across pages
+sessionStorage.setItem('gameRoomCode', gameConfig.roomCode);
+sessionStorage.setItem('userId', gameConfig.userId);
+sessionStorage.setItem('username', gameConfig.username);
+
+// Initialize ludoApp if it hasn't been initialized
+if (!window.ludoApp) {
+    window.ludoApp = {
+        gameState: {},
+        showNotification: function(msg, type) {
+            console.log(msg);
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type || 'info'} alert-dismissible fade show`;
+            alertDiv.innerHTML = msg + '<button class="btn-close" data-bs-dismiss="alert"></button>';
+            const container = document.querySelector('[role="alert"]') || document.body;
+            container.appendChild(alertDiv);
+        }
+    };
+}
+
+// Set game state
+window.ludoApp.gameState.roomCode = gameConfig.roomCode;
+window.ludoApp.gameState.userId = gameConfig.userId;
+window.ludoApp.gameState.username = gameConfig.username;
+
+// Initialize the board
+if (typeof window.ludoApp.initializeBoard === 'function') {
+    window.ludoApp.initializeBoard();
+}
+
+// Event Listeners
+document.getElementById('rollDiceBtn').addEventListener('click', function() {
+    if (window.ludoApp.rollDice) window.ludoApp.rollDice();
+});
+
+document.getElementById('surrenderBtn').addEventListener('click', function() {
+    if (confirm('Are you sure you want to surrender?')) {
+        window.socketFunctions.emitSurrender(gameConfig.roomCode, gameConfig.userId);
+    }
+});
+
+document.getElementById('leaveGameBtn').addEventListener('click', function() {
+    if (confirm('Are you sure you want to leave the game?')) {
+        window.location.href = '/lobby';
+    }
+});
+
+document.getElementById('chatForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (window.ludoApp.sendChatMessage) window.ludoApp.sendChatMessage();
+});
+</script>
+{% endblock %}
