@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Statistics | Ludo Arena{% endblock %}
+{% block content %}
+<section class="statistics-panel">
+  <h1>Game Statistics</h1>
+  {% if stat %}
+  <div class="stats-grid">
+    <div class="stat-card"><strong>{{ stat.games_won }}</strong><span>Wins</span></div>
+    <div class="stat-card"><strong>{{ stat.games_lost }}</strong><span>Losses</span></div>
+    <div class="stat-card"><strong>{{ stat.captures }}</strong><span>Captures</span></div>
+    <div class="stat-card"><strong>{{ stat.tokens_finished }}</strong><span>Tokens Home</span></div>
+    <div class="stat-card"><strong>{{ stat.total_games }}</strong><span>Total Games</span></div>
+    <div class="stat-card"><strong>{{ stat.total_time }}</strong><span>Seconds Played</span></div>
+  </div>
+  {% else %}
+  <p>No detailed stats are available yet.</p>
+  {% endif %}
+</section>
+{% endblock %}
