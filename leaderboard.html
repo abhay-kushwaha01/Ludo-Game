@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard - Ludo Master{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold text-white mb-2">
+                <i class="fas fa-trophy" style="color: gold;"></i> Leaderboard
+            </h1>
+            <p class="text-white-50">Top players ranked by wins and win rate</p>
+        </div>
+    </div>
+
+    <!-- Time Period Tabs -->
+    <ul class="nav nav-tabs mb-4" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="alltime-tab" data-bs-toggle="tab" data-bs-target="#alltime" type="button" role="tab">
+                <i class="fas fa-history"></i> All-Time
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="monthly-tab" data-bs-toggle="tab" data-bs-target="#monthly" type="button" role="tab">
+                <i class="fas fa-calendar"></i> This Month
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="weekly-tab" data-bs-toggle="tab" data-bs-target="#weekly" type="button" role="tab">
+                <i class="fas fa-calendar-week"></i> This Week
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+        <!-- All-Time Leaderboard -->
+        <div class="tab-pane fade show active" id="alltime" role="tabpanel">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+                                <th style="width: 10%;">
+                                    <i class="fas fa-medal"></i> Rank
+                                </th>
+                                <th style="width: 40%;">
+                                    <i class="fas fa-user"></i> Player
+                                </th>
+                                <th style="width: 15%;" class="text-center">
+                                    <i class="fas fa-crown"></i> Wins
+                                </th>
+                                <th style="width: 15%;" class="text-center">
+                                    <i class="fas fa-gamepad"></i> Games
+                                </th>
+                                <th style="width: 20%;" class="text-center">
+                                    <i class="fas fa-percent"></i> Win Rate
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for index, player in enumerate(players[:100], start=1) %}
+                            <tr>
+                                <td>
+                                    {% if index == 1 %}
+                                        <span class="badge" style="background: gold; color: black; font-size: 1rem;">
+                                            <i class="fas fa-crown"></i> #1
+                                        </span>
+                                    {% elif index == 2 %}
+                                        <span class="badge" style="background: silver; color: black; font-size: 1rem;">
+                                            <i class="fas fa-medal"></i> #2
+                                        </span>
+                                    {% elif index == 3 %}
+                                        <span class="badge" style="background: #CD7F32; font-size: 1rem;">
+                                            <i class="fas fa-medal"></i> #3
+                                        </span>
+                                    {% else %}
+                                        <strong>#{{ index }}</strong>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <strong>{{ player.username }}</strong>
+                                </td>
+                                <td class="text-center">
+                                    <span style="color: var(--primary-color); font-weight: bold;">{{ player.wins or 0 }}</span>
+                                </td>
+                                <td class="text-center">
+                                    {{ player.games_played or 0 }}
+                                </td>
+                                <td class="text-center">
+                                    {% set win_rate = ((player.wins or 0) / (player.games_played or 1) * 100) | int %}
+                                    <span class="badge" style="background: var(--secondary-color);">
+                                        {{ win_rate }}%
+                                    </span>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    <i class="fas fa-inbox"></i> No players yet
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Leaderboard -->
+        <div class="tab-pane fade" id="monthly" role="tabpanel">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+                                <th style="width: 10%;">Rank</th>
+                                <th style="width: 40%;">Player</th>
+                                <th style="width: 15%;" class="text-center">Wins</th>
+                                <th style="width: 15%;" class="text-center">Games</th>
+                                <th style="width: 20%;" class="text-center">Win Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    <i class="fas fa-clock"></i> Coming soon - Monthly rankings
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Leaderboard -->
+        <div class="tab-pane fade" id="weekly" role="tabpanel">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead>
+                            <tr style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+                                <th style="width: 10%;">Rank</th>
+                                <th style="width: 40%;">Player</th>
+                                <th style="width: 15%;" class="text-center">Wins</th>
+                                <th style="width: 15%;" class="text-center">Games</th>
+                                <th style="width: 20%;" class="text-center">Win Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    <i class="fas fa-clock"></i> Coming soon - Weekly rankings
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Players Stats -->
+    <div class="row mt-5">
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">MOST WINS</h6>
+                    {% if players %}
+                        <h4 style="color: var(--primary-color); font-weight: bold;">{{ players[0].wins or 0 }}</h4>
+                        <p class="small mb-0">{{ players[0].username }}</p>
+                    {% else %}
+                        <p class="text-muted">No data</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">BEST WIN RATE</h6>
+                    {% if players %}
+                        {% set best_wr_player = players|sort(attribute='games_played', reverse=True)|first %}
+                        <h4 style="color: var(--secondary-color); font-weight: bold;">
+                            {% set wr = ((best_wr_player.wins or 0) / (best_wr_player.games_played or 1) * 100) | int %}
+                            {{ wr }}%
+                        </h4>
+                        <p class="small mb-0">{{ best_wr_player.username }}</p>
+                    {% else %}
+                        <p class="text-muted">No data</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="text-muted mb-2">MOST GAMES</h6>
+                    {% if players %}
+                        {% set max_games = (players|map(attribute='games_played')|list|max) or 0 %}
+                        <h4 style="color: #fbbf24; font-weight: bold;">{{ max_games }}</h4>
+                        <p class="small mb-0">{{ (players|sort(attribute='games_played', reverse=True)|first).username }}</p>
+                    {% else %}
+                        <p class="text-muted">No data</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Go Back -->
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <a href="templates_index.html" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Lobby - Ludo Master{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold text-white">
+                <i class="fas fa-gamepad" style="color: var(--primary-color);"></i> Game Lobby
+            </h1>
+            <p class="text-white-50">Create or join a room to start playing with friends</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Create Room</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Select Mode</strong></label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="gameMode" id="multiplayerMode" value="multiplayer" checked>
+                            <label class="btn btn-outline-primary" for="multiplayerMode">
+                                <i class="fas fa-users"></i> Multiplayer
+                            </label>
+                            
+                            <input type="radio" class="btn-check" name="gameMode" id="singleplayerMode" value="singleplayer">
+                            <label class="btn btn-outline-primary" for="singleplayerMode">
+                                <i class="fas fa-robot"></i> vs AI
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3" id="difficultySection" style="display: none;">
+                        <label for="aiDifficulty" class="form-label"><strong>AI Difficulty</strong></label>
+                        <select class="form-select" id="aiDifficulty">
+                            <option value="easy">🟢 Easy - Great for beginners</option>
+                            <option value="medium" selected>🟡 Medium - Balanced gameplay</option>
+                            <option value="hard">🔴 Hard - Expert challenge</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary w-100 py-3" id="createRoomBtn" style="font-weight: 700; font-size: 1.1rem;">
+                        <i class="fas fa-plus"></i> Create Room
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-sign-in-alt"></i> Join Room</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="roomCodeInput" class="form-label"><strong>Room Code</strong></label>
+                        <input type="text" class="form-control form-control-lg text-center" id="roomCodeInput" placeholder="Enter 6-digit code" maxlength="6" style="font-size: 1.5rem; font-weight: bold; letter-spacing: 5px;">
+                        <small class="d-block text-muted mt-2">Ask your friend for the room code</small>
+                    </div>
+
+                    <button class="btn btn-success w-100 py-3" id="joinRoomBtn" style="font-weight: 700; font-size: 1.1rem;">
+                        <i class="fas fa-sign-in-alt"></i> Join Room
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-book"></i> Quick Guide</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold mb-2"><i class="fas fa-arrow-right" style="color: var(--primary-color);"></i> Getting Started</h6>
+                            <ol style="font-size: 0.95rem; line-height: 1.8;">
+                                <li>Choose to create or join a room</li>
+                                <li>Wait for 2-4 players to join (or play vs AI)</li>
+                                <li>Click <strong>START GAME</strong> when ready</li>
+                                <li>Roll the dice and move your tokens</li>
+                                <li>First player to finish all tokens wins!</li>
+                            </ol>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold mb-2"><i class="fas fa-gamepad" style="color: var(--secondary-color);"></i> Game Rules</h6>
+                            <ul style="font-size: 0.95rem; line-height: 1.8;">
+                                <li><strong>Dice Roll:</strong> Determines token movement</li>
+                                <li><strong>Rolling 6:</strong> Place new token or roll again</li>
+                                <li><strong>Safe Squares:</strong> Stars (★) - can't be captured</li>
+                                <li><strong>Capturing:</strong> Land on opponent = send them home</li>
+                                <li><strong>Multiple Tokens:</strong> Stack = can't be captured</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Store user info
+const userInfo = {
+    username: '{{ current_user.username }}',
+    userId: {{ current_user.id }},
+    baseUrl: '{{ request.host_url.rstrip('/') }}'
+};
+
+// Store in session for use in other pages
+sessionStorage.setItem('userId', userInfo.userId);
+sessionStorage.setItem('username', userInfo.username);
+
+// Update ludoApp gameState
+if (window.ludoApp) {
+    window.ludoApp.gameState.userId = userInfo.userId;
+    window.ludoApp.gameState.username = userInfo.username;
+}
+
+// Event listeners
+document.getElementById('createRoomBtn').addEventListener('click', function() {
+    const mode = document.querySelector('input[name="gameMode"]:checked').value;
+    const difficulty = document.getElementById('aiDifficulty').value;
+    
+    window.socketFunctions.emitRoomCreate(userInfo.username, userInfo.userId);
+});
+
+document.getElementById('joinRoomBtn').addEventListener('click', function() {
+    const roomCode = document.getElementById('roomCodeInput').value.toUpperCase().trim();
+    
+    if (!roomCode || roomCode.length !== 6) {
+        window.ludoApp.showNotification('Please enter a valid 6-digit room code', 'warning');
+        return;
+    }
+    
+    window.socketFunctions.emitRoomJoin(roomCode, userInfo.username, userInfo.userId);
+});
+
+// Toggle difficulty section based on mode
+document.querySelectorAll('input[name="gameMode"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        document.getElementById('difficultySection').style.display = 
+            this.value === 'singleplayer' ? 'block' : 'none';
+    });
+});
+
+// Allow Enter key in room code
+document.getElementById('roomCodeInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.getElementById('joinRoomBtn').click();
+    }
+});
+</script>
+{% endblock %}

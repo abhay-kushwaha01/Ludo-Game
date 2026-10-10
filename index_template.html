@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Ludo Master - Home{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <h1 class="display-4 fw-bold mb-4" style="color: white;">
+                <i class="fas fa-dice" style="color: var(--primary-color);"></i>
+                Play Ludo Online
+            </h1>
+            <p class="lead mb-4" style="color: rgba(255,255,255,0.9); font-size: 1.25rem;">
+                Join millions of players worldwide and experience the classic board game Ludo like never before. Play with friends, compete on leaderboards, and become a Ludo Master!
+            </p>
+            <div class="d-flex gap-3 flex-wrap">
+                {% if current_user.is_authenticated %}
+                    <a href="lobby.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-play"></i> Start Playing
+                    </a>
+                    <a href="dashboard.html" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                {% else %}
+                    <a href="register.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-plus"></i> Register Free
+                    </a>
+                    <a href="login.html" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="board-preview">Ludo Arena</div>
+  </div>
+</section>
+<section class="feature-grid">
+  <article>
+    <h2>Real-Time Multiplayer</h2>
+    <p>Invite friends, join public rooms, and play with up to 4 players in every match.</p>
+  </article>
+  <article>
+    <h2>AI Opponents</h2>
+    <p>Single-player mode includes easy, medium, and hard difficulties that make smart moves automatically.</p>
+  </article>
+  <article>
+    <h2>Profile & Leaderboard</h2>
+    <p>Track your wins, captures, and game history while competing for top leaderboard positions.</p>
+  </article>
+</section>
+{% endblock %}
