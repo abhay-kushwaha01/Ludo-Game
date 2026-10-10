@@ -1,74 +1,117 @@
-# Ludo Arena
+# 🎲 Ludo Arena
 
-A complete online Ludo game website built with Python, Flask, Flask-SocketIO, SQLite, HTML, CSS, and JavaScript.
+A web-based Ludo game built using Python, Flask, Flask-SocketIO, SQLite, HTML, CSS, and JavaScript.
 
-## Features
+Play Ludo with friends in real time or challenge AI opponents. The project also includes user authentication, leaderboards, player statistics, and an interactive game interface.
 
-- Real-time multiplayer rooms with 2–4 players
-- Official Ludo rules with capturing, safe zones, and extra turns on rolling 6
-- Single-player mode with Easy, Medium, and Hard AI
-- Login, registration, and user profiles
-- Leaderboard, statistics dashboard, and game history
-- Dice animation, smooth board rendering, and chat system
-- Save/resume game state and match lobby system
+## ✨ Features
 
-## Folder Structure
+- 🎮 Real-time multiplayer gameplay for 2–4 players
+- 🤖 Single-player mode with Easy, Medium, and Hard AI
+- 🔐 User registration and login
+- 🏆 Leaderboard and player statistics
+- 💬 In-game chat
+- 🎲 Interactive game board and dice animations
+- ♟️ Token capturing, safe zones, and extra turns on rolling a six
+- 👤 Player profiles and match history
 
-- `app.py` — Flask application factory and blueprint registration
-- `models.py` — SQLAlchemy models for users, rooms, history, and statistics
-- `game_logic.py` — Ludo rules engine, move validation, AI decision-making
-- `socket_events.py` — Socket.IO event handling for game rooms and chat
-- `templates/` — Jinja2 views for UI pages
-- `static/css/` — Application styling
-- `static/js/` — Client-side interactivity and real-time socket integration
-- `database/` — SQLite schema and game database
+## 🛠️ Tech Stack
 
-## Installation
+- **Backend:** Python, Flask, Flask-SocketIO
+- **Database:** SQLite, SQLAlchemy
+- **Frontend:** HTML, CSS, JavaScript
+- **Templates:** Jinja2
 
-1. Install Python 3.11 or newer.
-2. Create a virtual environment:
+## 📁 Project Structure
+
+```text
+Ludo-Game/
+├── app.py
+├── models.py
+├── game_logic.py
+├── socket_events.py
+├── requirements.txt
+├── README.md
+├── database/
+├── static/
+│   ├── css/
+│   └── js/
+└── templates/
+```
+
+## 🚀 Installation and Setup
+
+### Prerequisites
+
+- Python 3.11 or newer
+- Git
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/abhay-kushwaha01/Ludo-Game.git
+cd Ludo-Game
+```
+
+### 2. Create a Virtual Environment
+
+A virtual environment keeps this project's Python dependencies separate from other projects.
+
+```bash
+python -m venv .venv
+```
+
+### 3. Activate the Virtual Environment
+
+**Windows — Command Prompt:**
+
+```bat
+.venv\Scripts\activate.bat
+```
+
+**Windows — PowerShell:**
 
 ```powershell
-cd "C:\Users\Dhananjay Kushwaha\ludo-flask"
-python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-3. Install dependencies:
+**Linux / macOS:**
 
-```powershell
+```bash
+source .venv/bin/activate
+```
+
+### 4. Install Dependencies
+
+```bash
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-4. Initialize the database:
+### 5. Run the Application
 
-```powershell
-python -c "from app import create_app; app, _ = create_app(); from models import db; db.init_app(app); with app.app_context(): db.create_all()"
-```
-
-## Running locally
-
-```powershell
+```bash
 python app.py
 ```
 
-Open your browser at `http://127.0.0.1:5000`.
+Open your browser and visit:
 
-## Deployment
+**http://127.0.0.1:5000**
 
-### With Gunicorn and Eventlet
+Follow the database initialization instructions in the application code if the database is not created automatically.
 
-```powershell
-pip install gunicorn eventlet
-gunicorn -k eventlet -w 1 app:app
-```
+## 👨‍💻 Author
 
-### With Docker
+**Abhay Kushwaha**
 
-Create a `Dockerfile` and configure a web service using the Flask application.
+- GitHub: [@abhay-kushwaha01](https://github.com/abhay-kushwaha01)
+- Repository: [Ludo-Game](https://github.com/abhay-kushwaha01/Ludo-Game)
 
-## Notes
+## 📄 License
 
-- The database uses SQLite at `database/ludo.db`.
-- The Socket.IO handlers manage room creation, join, roll, moves, chat, and persistent state.
-- The AI engine supports automated legal moves based on chosen difficulty.
+No license has been specified for this project yet.
+
+---
+
+⭐ If you like this project, consider giving it a star!
+
