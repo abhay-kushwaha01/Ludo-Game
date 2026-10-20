@@ -1,4 +1,4 @@
-# 🎲 Ludo Arena
+# 🎲 Ludo 
 
 A web-based Ludo game built using Python, Flask, Flask-SocketIO, SQLite, HTML, CSS, and JavaScript.
 
