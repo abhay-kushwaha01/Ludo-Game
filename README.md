@@ -39,7 +39,7 @@ Ludo-Game/
 └── templates/
 ```
 
-## 🚀 Installation and Setup
+## 🚀 Installation for set
 
 ### Prerequisites
 
@@ -79,8 +79,7 @@ python -m venv .venv
 
 ```bash
 source .venv/bin/activate
-```
-
+``
 ### 4. Install Dependencies
 
 ```bash
