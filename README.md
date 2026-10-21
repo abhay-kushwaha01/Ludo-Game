@@ -39,7 +39,7 @@ Ludo-Game/
 └── templates/
 ```
 
-## 🚀 Installation for set
+## 🚀 Installation and set
 
 ### Prerequisites
 
