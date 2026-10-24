@@ -22,7 +22,7 @@ Play Ludo with friends in real time or challenge AI opponents. The project also 
 - **Frontend:** HTML, CSS, JavaScript
 - **Templates:** Jinja2
 
-## 📁 Project Structures
+## 📁 Project Structures ##
 
 ```text
 Ludo-Game/
