@@ -63,7 +63,7 @@ python -m venv .venv
 
 ### 3. Activate the Virtual Environment
 
-**Windows — Command Prompt:**
+**Windows — Command Prompt:
 
 ```bat
 .venv\Scripts\activate.bat
