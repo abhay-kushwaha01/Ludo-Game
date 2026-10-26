@@ -7,7 +7,7 @@ Play Ludo with friends in real time or challenge AI opponents. The project also 
 ## ✨ Features
 
 - 🎮 Real-time multiplayer gameplay for 2–4 players
-- 🤖 Single-player mode with Easy, Medium, and Hard AI
+- 🤖 Single-player mode with Easy, Medium, and Hard ai
 - 🔐 User registration and login
 - 🏆 Leaderboard and player statistics
 - 💬 In-game chat
