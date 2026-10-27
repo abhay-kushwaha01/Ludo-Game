@@ -24,6 +24,7 @@ Play Ludo with friends in real time or challenge AI opponents. The project also 
 
 ## 📁 Project Structures ##
 
+
 ```text
 Ludo-Game/
 ├── app.py
